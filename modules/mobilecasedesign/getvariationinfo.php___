@@ -1,0 +1,18 @@
+<?php
+	require_once('../../config/config.inc.php');
+	require_once('../../config/defines.inc.php');
+	require_once('../../config/settings.inc.php');
+	$design_id = $_POST['did'];
+	//$con = mysql_connect(_DB_SERVER_,_DB_USER_,_DB_PASSWD_);
+	$con = mysqli_connect(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
+	$html = '';
+	if($design_id != ''){
+		$result = mysqli_query($con,"select agl.public_name,al.name from " ._DB_PREFIX_. "custom_product_attributes cpa inner join " ._DB_PREFIX_. "attribute_group_lang agl on agl.id_attribute_group = cpa.id_attribute_group and agl.id_lang = cpa.id_lang inner join " ._DB_PREFIX_. "attribute_lang al on al.id_attribute = cpa.id_attribute and al.id_lang = cpa.id_lang where cpa.id_variation = '" . trim($design_id) . "'");
+		while($row = mysqli_fetch_array($result)){
+			$html .= $row['public_name'] . ': ' . $row['name'] . '<br/>';
+		}
+	}
+	
+	echo $html;
+		
+?>
